@@ -19,9 +19,10 @@
 #include <string>
 #include <typeindex>
 
-#define __bt_cplusplus __cplusplus
 #if defined(_MSVC_LANG) && !defined(__clang__)
 #define __bt_cplusplus (_MSC_VER == 1900 ? 201103L : _MSVC_LANG)
+#else
+#define __bt_cplusplus __cplusplus
 #endif
 
 #if defined(__linux) || defined(__linux__)
@@ -263,7 +264,7 @@ void XMLParser::PImpl::loadDocImpl(XMLDocument* doc, bool add_includes)
     }
 
 #if __bt_cplusplus >= 202002L
-    auto file_path(incl_node->Attribute("path"));
+    auto file_path(std::filesystem::path(incl_node->Attribute("path")));
 #else
     auto file_path(std::filesystem::u8path(incl_node->Attribute("path")));
 #endif
